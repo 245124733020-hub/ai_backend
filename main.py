@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-openai_api_key = "YOUR_API_KEY_HERE"
+openai_api_key = "AIzaSyC9X7kDzrwAXgdsV5-IIAR-ve7o3qhlQ1k"
 client = OpenAI(api_key=openai_api_key)
 
 @app.get("/")
@@ -35,3 +35,4 @@ def ask_ai(question: str):
     answer = response.choices[0].message["content"].strip()
 
     return {"answer": answer}
+
