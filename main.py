@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
+from pydantic import BaseModel
 
 app = FastAPI()
-client = OpenAI(api_key="AIzaSyC9X7kDzrwAXgdsV5-IIAR-ve7o3qhlQ1k")   # Replace
+client = OpenAI(api_key="AIzaSyC9X7kDzrwAXgdsV5-IIAR-ve7o3qhlQ1k")
+
+class Question(BaseModel):
+    question: str
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,13 +20,13 @@ app.add_middleware(
 def home():
     return {"message": "Backend running"}
 
-@app.get("/ask")
-def ask(question: str):
-    prompt = f"Give a clear, simple explanation for: {question}"
+@app.post("/ask")
+def ask(data: Question):
+    prompt = f"Give a clear, simple explanation for: {data.question}"
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gemini-3-pro-preview",
             messages=[
                 {"role": "user", "content": prompt}
             ]
@@ -33,7 +37,3 @@ def ask(question: str):
 
     except Exception as e:
         return {"error": str(e)}
-
-
-
-
