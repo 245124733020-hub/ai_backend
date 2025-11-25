@@ -6,7 +6,7 @@ import google.generativeai as genai
 app = FastAPI()
 
 # Configure Gemini API key
-genai.configure(api_key="AIzaSyDn1PI2U6huaebGJ1voP1iY1S8MqbWrsko")
+genai.configure(api_key="AIzaSyD-Ix8-Jj_epSQFnaSKz4-tSCD7yy5XFKI")
 
 # Input model
 class Question(BaseModel):
@@ -37,5 +37,6 @@ def ask(data: Question):
 
     except Exception as e:
         return {"error": str(e)}
+
 
 
