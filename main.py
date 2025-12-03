@@ -37,6 +37,9 @@ def ask(data: Question):
 
     except Exception as e:
         return {"error": str(e)}
+@app.get("/healthz")
+async def healthz():
+    return{"status":"ok"}
 
 
 
