@@ -6,7 +6,7 @@ import google.generativeai as genai
 app = FastAPI()
 
 # Configure Gemini API key
-genai.configure(api_key="AIzaSyBMWGAmPAUWF32NFkvdyh0_Mjrs_fq5Gcc")
+genai.configure(api_key="AIzaSyClCC1kwKFI-4GWNCErGB8M5YMLebFu1X4")
 
 # Input model
 class Question(BaseModel):
@@ -40,6 +40,7 @@ def ask(data: Question):
 @app.get("/healthz")
 async def healthz():
     return{"status":"ok"}
+
 
 
 
