@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import google.generativeai as genai
+from openai import OpenAI
+import os
 
 app = FastAPI()
 
 # Configure Gemini API key
-genai.configure(api_key="AIzaSyClCC1kwKFI-4GWNCErGB8M5YMLebFu1X4")
+client=OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Input model
 class Question(BaseModel):
@@ -27,25 +28,30 @@ def home():
 @app.post("/ask")
 def ask(data: Question):
 
-    prompt = f"Give a clear, simple explanation for: {data.question}"
+    prompt = prompt = f"""
+Explain the following term in a simple and clear way suitable for students.
+Include:
 
-    try:
-        model = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(prompt)
+1. Definition: Simple and clear (1–2 sentences)
+2. Explanation: Easy to understand (3-4 sentences)
+3. Daily Life Example: One practical example
+4. Summary: A short 2-line summary
 
-        return {"answer": response.text}
+Term: {data.question}
+"""
+
+
+     try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        answer = response.choices[0].message["content"]
+        return {"answer": answer}
 
     except Exception as e:
         return {"error": str(e)}
-@app.get("/healthz")
-async def healthz():
-    return{"status":"ok"}
-
-
-
-
-
-
 
 
 
