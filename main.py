@@ -1,13 +1,14 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from openai import OpenAI
+import google.generativeai as genai
 import os
 
 app = FastAPI()
 
 # Configure Gemini API key
-client=OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 # Input model
 class Question(BaseModel):
@@ -41,17 +42,16 @@ Term: {data.question}
 """
 
 
-     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt)
 
-        answer = response.choices[0].message["content"]
-        return {"answer": answer}
+        return {"answer": response.text}
 
     except Exception as e:
         return {"error": str(e)}
+
+
 
 
 
