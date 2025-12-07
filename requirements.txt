@@ -1,7 +1,8 @@
 fastapi
 uvicorn
-OpenAI
+google-generativeai
 pydantic
 python-multipart
+
 
 
